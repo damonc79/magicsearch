@@ -5,13 +5,11 @@ import { SearchResult } from './search-result.model';
 
 @Injectable()
 export class SearchService {
-  newResult: SearchResult[];
-
+  
   constructor(private http: Http) { }
 
-  getResults(source, recent){
+  getResults(source){
     source = source || "/assets/wikipedia.json";
-    recent = recent || true;
 
     return this.http.get(source).map(
       (resp: Response) =>  resp.json()

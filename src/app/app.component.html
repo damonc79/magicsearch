@@ -9,4 +9,13 @@
   </div>
 </div>
 
-<magic-search></magic-search>
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">Search Wikipedia for Companies: </div>
+    <div class="col-md-8"><magic-search [source]="'/assets/wikipedia.json'"></magic-search></div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">Search Nameberry for Names: </div>
+    <div class="col-md-8"><magic-search [source]="'/assets/nameberry.json'"></magic-search></div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { SearchService } from '../shared/search.service';
 import { SearchResult } from '../shared/search-result.model';
 
@@ -10,6 +10,7 @@ import { SearchResult } from '../shared/search-result.model';
 export class MagicSearchComponent implements OnInit {
   searchResults: SearchResult[];
   showRecent: Boolean = false;
+  @Input() source: string;
   @ViewChild('searchBox') searchbox;
 
   constructor(public search: SearchService) { }
@@ -19,21 +20,25 @@ export class MagicSearchComponent implements OnInit {
   }
 
   fetchRecent(){
-    this.showRecent = true;
-
-    this.search.getResults("/assets/wikipedia.json", true).subscribe(
-      data => {
-        this.searchResults = data.slice(0,5);
-        //console.log(this.searchResults);
-      }
-    );
+    if(this.searchbox.nativeElement.value.length >= 1){
+      this.showRecent = false;
+      this.fetchResults(this.searchbox.nativeElement.value);
+    } else {
+      this.showRecent = true;
+      this.search.getResults(this.source).subscribe(
+        data => {
+          this.searchResults = data.slice(0,5);
+          //console.log(this.searchResults);
+        }
+      );
+    }
   }
 
   fetchResults(value){
     this.showRecent = false;
 
     if(value != ""){
-      this.search.getResults("/assets/wikipedia.json", true).subscribe(
+      this.search.getResults(this.source).subscribe(
         data => {
           this.searchResults = data;
           //console.log(value);
@@ -45,8 +50,10 @@ export class MagicSearchComponent implements OnInit {
   }
 
   clearResults(){
-    this.showRecent = false;
-    this.searchResults = [];
+    setTimeout(() => {
+      this.showRecent = false;
+      this.searchResults = [];
+    }, 100);
   }
 
 }
